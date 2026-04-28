@@ -5,7 +5,18 @@ Links can be used at [](https://view.qiime2.org/)
 
 ## Visualizations 
 
-###
+### Denoise
+
+<a href="https://view.qiime2.org/visualization/?src=https://dkbiocode.github.io/qiime2-LEI_2026-04/qzv/2-repseqs.qzv"  target='_blank'>2-repseqs.qzv</a>
+
+<a href="https://view.qiime2.org/visualization/?src=https://dkbiocode.github.io/qiime2-LEI_2026-04/qzv/2-stats.qzv" target='_blank'>2-stats.qzv</a>
+
+<a href="https://view.qiime2.org/visualization/?src=https://dkbiocode.github.io/qiime2-LEI_2026-04/qzv/summarize.qzv" target='_blank'>summarize.qzv</a>
+
+
+### Taxonomy (greengenes)
+
+<a href="https://view.qiime2.org/visualization/?src=https://dkbiocode.github.io/qiime2-LEI_2026-04/qzv/taxonomy_greengenes.qzv" target='_blank'>taxonomy_greengenes.qzv</a>
 
 
 
