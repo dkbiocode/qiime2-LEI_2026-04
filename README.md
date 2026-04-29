@@ -26,6 +26,8 @@ Links can be used at [](https://view.qiime2.org/)
 
 <a href="https://view.qiime2.org/visualization/?src=https://dkbiocode.github.io/qiime2-LEI_2026-04/qzv/jaccard_emperor.qzv" target='_blank'>jaccard_emperor.qzv</a>
 
+<img src="figures/emperor-image.png">
+
 <a href="https://view.qiime2.org/visualization/?src=https://dkbiocode.github.io/qiime2-LEI_2026-04/qzv/unweighted_unifrac_emperor.qzv" target='_blank'>unweighted_unifrac_emperor.qzv</a>
 
 <a href="https://view.qiime2.org/visualization/?src=https://dkbiocode.github.io/qiime2-LEI_2026-04/qzv/weighted_unifrac_emperor.qzv" target='_blank'>weighted_unifrac_emperor.qzv</a>
