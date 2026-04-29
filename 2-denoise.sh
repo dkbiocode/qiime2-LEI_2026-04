@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
+#SBATCH --nodes=1
+#SBATCH --ntasks=4
+#SBATCH --time=1:00:00
+#SBATCH --qos=normal
+#SBATCH --partition=amilan
+#SBATCH --job-name=qiime-denoise
+#SBATCH --mail-user=dcking@colostate.edu
+#SBATCH --mail-type=END,FAIL,INVALID_DEPEND
+#SBATCH --output=%x.%j.log # gives slurm.ID.log
+module load qiime2/2026.1_amplicon # need this version for sk-learn 1.4.2
+
 set -eu
-INDENT=""
-echo_grey() {
-    echo -e "$INDENT\033[0;90m$@\033[0m"
-}
+source shared.sh # defines echo_[color]
 
 threads=$(nproc)
 
@@ -24,6 +32,7 @@ cmd="qiime dada2 denoise-paired \
     --p-n-threads ${threads} \
     --o-representative-sequences ${rep_seqs_qza} \
     --o-denoising-stats ${stats_qza} \
+    --o-base-transition-stats base-transition-stats.qza \
     --o-table ${table}"
 echo_grey $cmd
 #time eval $cmd
@@ -47,7 +56,7 @@ echo_grey $cmd
 summarize_qvz="summarize.qzv"
 if [ -e metadata.txt ]
 then
-    echo "metadata.txt already exists. Rename or delete to recreate it."
+    echo_yellow "metadata.txt already exists. Rename or delete to recreate it."
 else
     echo -e "sampleid\tdescription" > metadata.txt
     cmd="ls Fastq/*_R1_001.fastq.gz \
@@ -57,16 +66,21 @@ else
     echo_grey "$cmd"
     eval "$cmd"
 
-    echo -e "\033[0;90mCreated metadata.txt"
+    echo_green "Created metadata.txt"
+    echo -e "\033[0;90m"
     cat metadata.txt
     echo -e "\033[0m"
 fi
 cmd="qiime feature-table summarize \
         --i-table ${table} \
-        --m-sample-metadata-file metadata.txt \
-        --o-visualization ${summarize_qvz}"
+        --m-metadata-file metadata.txt \
+        --o-summary ${summarize_qvz} \
+        --o-feature-frequencies feature-frequencies.qza \
+        --o-sample-frequencies sample-frequencies.qza"
+
+
 echo_grey "$cmd"
-#time eval "$cmd"
+time eval "$cmd"
 
 
 # STEP 4: TABULATE_SEQS:
