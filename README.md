@@ -18,5 +18,5 @@ Links can be used at [](https://view.qiime2.org/)
 
 <a href="https://view.qiime2.org/visualization/?src=https://dkbiocode.github.io/qiime2-LEI_2026-04/qzv/taxonomy_greengenes.qzv" target='_blank'>taxonomy_greengenes.qzv</a>
 
-
+<a href="https://view.qiime2.org/visualization/?src=https://dkbiocode.github.io/qiime2-LEI_2026-04/qzv/taxa-bar-plots.qzv" target='_blank'>taxonomy_barplot</a>
 
