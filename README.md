@@ -7,6 +7,10 @@ Qiime2 analysis of samples April 2026
 
 ## Visualizations 
 
+### Demux Summary 
+
+<a href="https://view.qiime2.org/visualization/?src=https://dkbiocode.github.io/qiime2-LEI_2026-04/qzv/demux_summary.qzv" target='_blank'>demux_summary.qzv</a>
+
 ### Denoise
 
 <a href="https://view.qiime2.org/visualization/?src=https://dkbiocode.github.io/qiime2-LEI_2026-04/qzv/2-repseqs.qzv"  target='_blank'>2-repseqs.qzv</a>
