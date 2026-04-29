@@ -1,9 +1,9 @@
 sampleid	description
-2629LEI-1	na
-2629LEI-2	na
-2629LEI-3	na
-2629LEI-4	na
-2629LEI-5	na
-2629LEI-6	na
-2629LEI-7	na
-2629LEI-NTC	na
+2629LEI-1	real
+2629LEI-2	real
+2629LEI-3	real
+2629LEI-4	real
+2629LEI-5	real
+2629LEI-6	real
+2629LEI-7	real
+2629LEI-NTC	NTC
