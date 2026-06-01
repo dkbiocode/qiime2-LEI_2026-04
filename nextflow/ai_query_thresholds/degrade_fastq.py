@@ -16,15 +16,48 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class DegradeParams:
-    tail_start:    int
-    tail_slope:    float
-    global_noise:  float
-    dropout_rate:  float
-    dropout_floor: float
-    seed:          int
-    min_qual:      int = 0
-    max_qual:      int = 40
-
+    """
+    Parameters controlling synthetic quality degradation of FASTQ reads.
+    
+    Three degradation modes are applied in order:
+    
+    1. TAIL DEGRADATION: Simulates progressive signal decay toward read ends,
+       caused by polymerase exhaustion and phasing accumulation.
+       
+       tail_start:  Position where quality decay begins. Default 150 means the
+                    first 150 bases are unaffected by tail decay.
+       tail_slope:  Phred score penalty per position past tail_start. Default 0.15
+                    means a read at position 250 loses (250-150)*0.15 = 15 Phred
+                    points from tail decay alone.
+    
+    2. GLOBAL NOISE: Simulates random per-base signal variation from optical
+       crosstalk, incomplete cleavage, and general instrument noise.
+       
+       global_noise: Standard deviation of Gaussian noise added at every position.
+                    Default 2.0 means ~95% of bases shift by ±4 Phred points.
+    
+    3. DROPOUT: Simulates sporadic low-quality positions caused by bubbles,
+       surface chemistry failures, or damaged flow cell regions.
+       
+       dropout_rate:  Fraction of positions affected. Default 0.02 means ~1 in 50
+                     bases receives a severe quality drop.
+       dropout_floor: Minimum Phred score assigned to dropout positions. Default 0
+                     allows dropouts to hit the lowest possible quality.
+    
+    GENERAL:
+    
+       seed:     Base random seed. Chunk index is added for per-chunk reproducibility.
+       min_qual: Absolute Phred floor after all degradation. Default 0.
+       max_qual: Absolute Phred ceiling. Default 40 (standard Illumina max).
+    """
+    tail_start:    int   = 150
+    tail_slope:    float = 0.15
+    global_noise:  float = 2.0
+    dropout_rate:  float = 0.02
+    dropout_floor: float = 0
+    seed:          int   = 11235713
+    min_qual:      int   = 0
+    max_qual:      int   = 40
 
 def degrade_chunk(
     chunk: Iterable[FastqRecord],
@@ -114,7 +147,7 @@ def main():
     R2 = f"{basedir}/sample_data/2629LEI-2_S2_L001_R2_001.fastq.gz"
 
     # degradation params
-    degrade = DegradeParams(0,0,0,0,0,0,0)
+    degrade = DegradeParams()
 
     tmpdir = os.getenv('TMP') or os.getenv('TMPDIR') or '/tmp'
     for R in [R1, R2]:
