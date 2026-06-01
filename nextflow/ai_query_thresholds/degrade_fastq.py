@@ -55,7 +55,7 @@ class DegradeParams:
     global_noise:  float = 2.0
     dropout_rate:  float = 0.02
     dropout_floor: float = 0
-    seed:          int   = 11235713
+    seed:          int   = 1123581321
     min_qual:      int   = 0
     max_qual:      int   = 40
 
@@ -141,6 +141,10 @@ def process_streaming(
 
 
 def main():
+
+    MEM_PER_THREAD_MB = 50
+    N_WORKERS = 6
+
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     basedir = os.path.dirname(os.path.abspath(__file__))
     R1 = f"{basedir}/sample_data/2629LEI-2_S2_L001_R1_001.fastq.gz"
@@ -155,11 +159,12 @@ def main():
         if read_dim is None:
             raise ValueError(f"could not read any records from {R}")
         read_len, bytes_per_read, mem_per_read = read_dim
-        chunksize = calculate_chunk_size(mem_per_read)
+        chunksize = calculate_chunk_size(mem_per_read, mem_per_thread_mb=MEM_PER_THREAD_MB)
         print(f"{R=}\n{read_len=}, {bytes_per_read=}, {mem_per_read=} {chunksize=}")
         outpath = R.removesuffix('.fastq.gz') + '_degrade.fastq.gz'
-        process_streaming(R, outpath, degrade, chunk_size=chunksize, temp_dir=tmpdir)
+        process_streaming(R, outpath, degrade, chunk_size=chunksize, n_workers= N_WORKERS, temp_dir=tmpdir)
 
+    print(f"{MEM_PER_THREAD_MB=}, {N_WORKERS=}")
 
 if __name__ == "__main__":
     main()
