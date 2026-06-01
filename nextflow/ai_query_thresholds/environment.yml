@@ -1,4 +1,4 @@
-name: ai-chose-point
+name: ai-fastqc-choose-point
 channels:
   - conda-forge
   - bioconda
