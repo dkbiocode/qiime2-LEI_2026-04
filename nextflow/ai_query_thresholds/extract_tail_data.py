@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
+import sys
+import os
 import zipfile
 import csv
 import io
+import json
+from openai import OpenAI
+# Initialize OpenAI client
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+model = "gpt-4o-mini"
+
+demux_file = sys.argv[1] # path to a demux_summary.qzv
+
 amplicon_length = 0
 
 def summarize_tail(tsv_data, last_n=50):
@@ -19,7 +29,7 @@ def summarize_tail(tsv_data, last_n=50):
 
 endsize = 20
 
-with zipfile.ZipFile('demux_summary.qzv', 'r') as z:
+with zipfile.ZipFile(demux_file, 'r') as z:
     for name in z.namelist():
         if name.endswith('forward-seven-number-summaries.tsv'):
             with z.open(name) as f:
@@ -56,4 +66,21 @@ Recommend trunc-len-f and trunc-len-r for DADA2 denoise-paired using these crite
 Respond ONLY with valid JSON, no markdown formatting:
 {{"trunc_len_f": N, "trunc_len_r": N, "reasoning": "..."}}"""
 
-print(prompt)
+#print(prompt)
+
+response = client.chat.completions.create(
+    model=model,
+    messages=[
+        #{"role": "system", "content": "You are an expert at analyzing scientific queries about NGS diagnostics."},
+        {"role": "user", "content": prompt}
+    ],  
+    response_format={"type": "json_object"},
+    temperature=0.3  # Lower temperature for more consistent decomposition
+)   
+
+result = json.loads(str(response.choices[0].message.content))
+
+# Add original data to result
+#result["original_data"] = data
+
+print(result)
